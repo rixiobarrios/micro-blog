@@ -1,0 +1,34 @@
+1. Generate scaffold resources:
+
+a. Posts:
+
+rails generate scaffold post title:string body:text user_id:integer
+
+rails db:migrate
+
+b. Comments:
+
+rails generate scaffold comment name:string body:text post_id:integer
+
+rails db:migrate
+
+c. Users:
+
+Add gem 'devise' to your Gemfile
+
+bundle install
+
+stop and restart your server 
+bin/server
+
+rails g devise:install
+
+rails g devise user username:string avatar_url:string
+
+rails db:migrate
+
+show all views for devise 
+rails g devise:views
+
+make landing page all posts under routes
+root 'posts#index'
