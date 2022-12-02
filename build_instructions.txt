@@ -40,3 +40,21 @@ rails g annotate:install
 
 run
 rails annotate_models
+
+4. Added conditional navigation
+
+     <!-- conditional for user sessions/rendering links -->
+      <% if current_user != nil %>
+      <%= link_to "Your posts", posts_path %>
+      |
+      <%= link_to "Edit profile", edit_user_registration_path %>
+      |
+      <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+      |
+      <%= current_user.username %>
+    
+      <% else %>
+      <%= link_to "Sign in", user_session_path %>
+      |
+      <%= link_to "Sign up", new_user_registration_path %>
+      <% end %>
