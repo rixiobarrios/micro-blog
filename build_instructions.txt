@@ -30,5 +30,13 @@ rails db:migrate
 show all views for devise 
 rails g devise:views
 
-make landing page all posts under routes
+2. Make landing page all posts under routes
+
 root 'posts#index'
+
+3. Install annotate to visualize tables/models
+
+rails g annotate:install
+
+run
+rails annotate_models
