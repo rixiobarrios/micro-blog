@@ -2,13 +2,13 @@
 
 a. Posts:
 
-rails generate scaffold post title:string body:text user_id:integer
+rails generate scaffold post title:string body:text post_count:integer user_id:integer
 
 rails db:migrate
 
 b. Comments:
 
-rails generate scaffold comment name:string body:text post_id:integer
+rails generate scaffold comment name:string body:text comment_count:integer post_id:integer
 
 rails db:migrate
 
@@ -55,7 +55,7 @@ rails annotate_models
       |
       <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
       |
-      <%= current_user.username %>
+     
     
       <% else %>
       <%= link_to "Sign in", user_session_path %>
@@ -79,6 +79,9 @@ class User < ApplicationRecord
 
   has_many :posts       
 end
+
+a. Add the :counter_cache options to belongs_to
+belongs_to :user, counter_cache: true
 
 6. Only show current_user posts on index, new and create
 
@@ -118,3 +121,30 @@ def create
     </div>
 
     <% end %>
+
+8. Allow Additional Parameters Through Security
+class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, :keys => [:username, :avatar_url])
+    
+    devise_parameter_sanitizer.permit(:account_update, :keys => [:username, :avatar_url])
+  end
+end 
+
+9. Show username at end on links on application.html.erb
+
+<%= current_user.username %>
+
+
+10. Add humanize helper to created_at
+<td><%= time_ago_in_words(post.created_at) %> ago</td>
+
+11. Add better redirects by adding redirect_to("/posts")
+a. create, update, destroy
+format.html { redirect_to posts_path, notice: "Post was successfully created." }
+format.html { redirect_to posts_path, notice: "Post was successfully updated." }
+format.html { redirect_to posts_path, notice: "Post was successfully destroyed." }

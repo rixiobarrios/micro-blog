@@ -4,8 +4,10 @@
 #
 #  id                     :bigint           not null, primary key
 #  avatar_url             :string
+#  comments_count         :integer
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  posts_count            :integer
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string

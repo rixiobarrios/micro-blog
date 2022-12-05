@@ -10,6 +10,6 @@
 #  user_id    :integer
 #
 class Post < ApplicationRecord
-
-  belongs_to :user
+  
+  belongs_to :user, counter_cache: true
 end
