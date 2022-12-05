@@ -30,6 +30,11 @@ rails db:migrate
 show all views for devise 
 rails g devise:views
 
+Add to ApplicationsController
+class ApplicationController < ActionController::Base
+before_action :authenticate_user!
+end
+
 2. Make landing page all posts under routes
 
 root 'posts#index'
@@ -41,8 +46,7 @@ rails g annotate:install
 run
 rails annotate_models
 
-4. Added conditional navigation
-
+4. Added conditional navigation to application.html.erb
      <!-- conditional for user sessions/rendering links -->
       <% if current_user != nil %>
       <%= link_to "Your posts", posts_path %>
@@ -58,3 +62,59 @@ rails annotate_models
       |
       <%= link_to "Sign up", new_user_registration_path %>
       <% end %>
+
+5. Add associations
+class Comment < ApplicationRecord
+
+  belongs_to :post
+  has_many :comments
+end
+
+class Post < ApplicationRecord
+
+  belongs_to :user
+end
+
+class User < ApplicationRecord
+
+  has_many :posts       
+end
+
+6. Only show current_user posts on index, new and create
+
+  def index
+    @posts = current_user.posts.order(created_at: :DESC)
+  end
+
+def new
+    @post = current_user.posts.build
+  end
+
+def create
+@post = current_user.posts.build(post_params)
+
+    respond_to do |format|
+      if @post.save
+        format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
+        format.json { render :show, status: :created, location: @post }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+7. Add notice and alert to application.html.erb, delete notices on all files
+    <!-- conditional to avoid duplicate alerts or notices -->
+    <% if notice.present? %>
+    <div style="color: green;">
+      <%= notice %>
+    </div>
+
+    <% end %>
+    <% if alert.present? %>
+    <div style="color: red;">
+      <%= alert %>
+    </div>
+
+    <% end %>

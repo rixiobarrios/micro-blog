@@ -28,6 +28,20 @@
       <%= link_to "Sign up", new_user_registration_path %>
       <% end %>
 
+    <!-- conditional to avoid duplicate alerts or notices -->
+    <% if notice.present? %>
+    <div style="color: green;">
+      <%= notice %>
+    </div>
+
+    <% end %>
+    <% if alert.present? %>
+    <div style="color: red;">
+      <%= alert %>
+    </div>
+
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
